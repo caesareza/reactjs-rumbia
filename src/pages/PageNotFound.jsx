@@ -1,7 +1,3 @@
 export default function PageNotFound() {
-    return(
-        <section>
-            Halaman tidak ditemukan
-        </section>
-    )
+    return <section>Halaman tidak ditemukan</section>
 }

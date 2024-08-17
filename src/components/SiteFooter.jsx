@@ -1,3 +1,3 @@
-const SiteFooter = () => <footer>Ini site footer</footer>;
+const SiteFooter = () => <footer>&copy; Agustus 2024</footer>
 
-export default SiteFooter;
+export default SiteFooter
