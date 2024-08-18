@@ -1,14 +1,51 @@
-// const CACHE_NAME = 'valhala-cache-v1';
+const CACHE_NAME = 'valhala-cache-v1'
+const APP_SHELL_URLS = [
+    '/',
+    '/index.html',
+    '/app-icon-192x192.png',
+    '/app-icon-512x512.png',
+    '/manifest.json',
+    '/offline.html',
+]
 
 // This code executes in its own worker or thread
 self.addEventListener('install', (event) => {
-    console.log('Service worker install', event)
+    event.waitUntil(
+        caches.open(CACHE_NAME).then((response) => {
+            console.log('Opened cache')
+            return response.addAll(APP_SHELL_URLS)
+        })
+    )
 })
+
 self.addEventListener('fetch', (event) => {
-    console.log('Service worker fetched', event.request.url)
+    event.respondWith(
+        fetch(event.request)
+            .then((response) => {
+                if (!event.request.url.startsWith('http')) {
+                    return
+                }
+
+                const clone = response.clone()
+                caches.open(CACHE_NAME).then((cache) => {
+                    cache.put(event.request, clone)
+                })
+                return response
+            })
+            .catch(async () => {
+                // Cache hit - return the response from the cache
+                const getPageFromCache = await caches.match(event.request)
+                if (getPageFromCache) {
+                    return getPageFromCache
+                }
+
+                return caches.match('/offline.html')
+            })
+    )
 })
+
 self.addEventListener('activate', (event) => {
-    console.log('Service worker activated', event)
+    console.log('asd', event)
 })
 
 self.addEventListener('push', (event) => {

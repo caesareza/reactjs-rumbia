@@ -2,6 +2,7 @@
     "name": "Valhala Kitchen",
     "short_name": "Valhala",
     "description": "Valhala Kitchen Website",
+    "id": "/",
     "start_url": "/",
     "display": "standalone",
     "background_color": "#efefef",
